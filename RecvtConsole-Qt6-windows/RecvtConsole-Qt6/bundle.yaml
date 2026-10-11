@@ -1,0 +1,6 @@
+title: AI 监听
+tooltip: 启动或重新启动监听，接收 D:\revit_ai_script 中的建模任务。启动后可以关闭输出窗口。
+min_revit_version: 2025
+engine:
+  clean: true
+  persistent: true

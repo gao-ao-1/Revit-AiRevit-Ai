@@ -1,0 +1,27 @@
+{
+  "version": 3,
+  "configurePresets": [
+    {
+      "name": "qt6-msvc-release",
+      "displayName": "Qt 6.11.1 MSVC Release (Ninja)",
+      "generator": "Ninja",
+      "binaryDir": "$penv{LOCALAPPDATA}/RecvtConsole/build/msvc-release",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Release",
+        "CMAKE_MAKE_PROGRAM": "D:/qt6/Tools/Ninja/ninja.exe",
+        "CMAKE_PREFIX_PATH": "D:/qt6/6.11.1/msvc2022_64"
+      }
+    },
+    {
+      "name": "qt6-msvc-debug",
+      "displayName": "Qt 6.11.1 MSVC Debug (Ninja)",
+      "inherits": "qt6-msvc-release",
+      "binaryDir": "$penv{LOCALAPPDATA}/RecvtConsole/build/msvc-debug",
+      "cacheVariables": { "CMAKE_BUILD_TYPE": "Debug" }
+    }
+  ],
+  "buildPresets": [
+    { "name": "qt6-msvc-release", "configurePreset": "qt6-msvc-release", "jobs": 4 },
+    { "name": "qt6-msvc-debug", "configurePreset": "qt6-msvc-debug", "jobs": 4 }
+  ]
+}
