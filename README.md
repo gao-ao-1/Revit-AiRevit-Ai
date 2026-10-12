@@ -1,6 +1,15 @@
 # RecvtConsole — Qt 6 / Revit 2025
 
-先用分支v1-test这个版本，如多有啥问题请留言
+直接去v1-test上下载RecvtConsole-Qt6-windows这个文件夹，里面是可运行的程序，将几个py文件复制到Revit设置监听的地方
+
+## 更新 Revit 监听器
+
+1. 从运行包取出 `script.py`、`recvt_bridge.py`、`recvt_model.py`，一起覆盖到：
+   `D:\pyMyTools.extension\MyTools.tab\AI_Panel.panel\AI_Listener.pushbutton`
+2. 重启 Revit，打开建筑项目，点击按钮，看到 `Recvt Listener v20 / Qt 6 started`。
+3. 默认通信目录为 `D:\revit_ai_script`。若需修改，同时修改 script.py 的 `SCRIPTS_DIR` 和 Qt 的“脚本目录”。
+4. 先点 Qt 的“重新导出 / 刷新预览”，再测试聊天和建模。不要运行之前的 Qt 6 测试程序。
+
 
 
 本工程使用 Qt 6。界面用 Qt Widgets，三维预览用 Qt3D。
@@ -30,13 +39,6 @@ Qt Creator 若在编译器检测阶段失败，且日志中 JOM 的中文构建�
 
 CLion 自带 MinGW 工具链也已验证：CMake 选项改为 `-DCMAKE_PREFIX_PATH=D:/qt6/6.11.1/mingw_64`，不能混用 msvc2022_64。修改后执行 Reload CMake，先成功生成 build.ninja 再构建。Windows 构建完成后默认自动部署 Qt DLL、插件及匹配编译器的 MinGW 运行库，方便直接启动；可用 RECVT_DEPLOY_RUNTIME=OFF 禁用。MinGW moc 的临时输出放到系统临时目录，以兼容中文项目路径。
 
-## 更新 Revit 监听器
-
-1. 从运行包取出 `script.py`、`recvt_bridge.py`、`recvt_model.py`，一起覆盖到：
-   `D:\pyMyTools.extension\MyTools.tab\AI_Panel.panel\AI_Listener.pushbutton`
-2. 重启 Revit，打开建筑项目，点击按钮，看到 `Recvt Listener v20 / Qt 6 started`。
-3. 默认通信目录为 `D:\revit_ai_script`。若需修改，同时修改 script.py 的 `SCRIPTS_DIR` 和 Qt 的“脚本目录”。
-4. 先点 Qt 的“重新导出 / 刷新预览”，再测试聊天和建模。不要运行之前的 Qt 6 测试程序。
 
 如果 Qt 与 Revit 在不同电脑，两端必须访问同一个共享通信目录。返回的模型路径为相对路径。
 
