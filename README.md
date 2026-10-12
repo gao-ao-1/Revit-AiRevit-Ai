@@ -1,5 +1,8 @@
 # RecvtConsole — Qt 6 / Revit 2025
 
+先用分支v1-test这个版本，如多有啥问题请留言
+
+
 本工程使用 Qt 6。界面用 Qt Widgets，三维预览用 Qt3D。
 普通聊天不会执行代码；明确建模请求由 AI 返回脚本，Revit 监听器执行，导出 IFC 和 OBJ。
 Qt 显示 OBJ 网格，IFC 用于交付；不直接读取任意 IFC，不自动保存 RVT。
