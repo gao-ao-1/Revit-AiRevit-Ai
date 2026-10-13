@@ -155,7 +155,13 @@ def write_context(doc, directory):
     atomic_json(os.path.join(directory, 'revit_context.json'), data)
 
 
-def export_mesh(doc, path):
+def model_element_ids(doc):
+    from Autodesk.Revit import DB
+    return set(text_type(item.Id.Value) for item in
+               DB.FilteredElementCollector(doc).WhereElementIsNotElementType())
+
+
+def export_mesh(doc, path, element_ids=None):
     from Autodesk.Revit import DB
     options = DB.Options()
     options.DetailLevel = DB.ViewDetailLevel.Fine
@@ -192,6 +198,8 @@ def export_mesh(doc, path):
                         collect(child, transform.Multiply(obj.Transform))
 
         for element in DB.FilteredElementCollector(doc).WhereElementIsNotElementType():
+            if element_ids is not None and text_type(element.Id.Value) not in element_ids:
+                continue
             try:
                 geometry = element.get_Geometry(options)
                 if geometry is not None:
@@ -204,7 +212,7 @@ def export_mesh(doc, path):
     return counts[1], skipped[0]
 
 
-def export_ifc(doc, directory):
+def export_ifc(doc, directory, element_ids=None):
     from Autodesk.Revit import DB
     options = DB.IFCExportOptions()
     options.FileVersion = DB.IFCVersion.IFC4
@@ -216,6 +224,24 @@ def export_ifc(doc, directory):
     try:
         if transaction.Start() != DB.TransactionStatus.Started:
             raise Exception('Cannot start IFC export transaction')
+        if element_ids is not None:
+            if not element_ids:
+                raise ValueError('This task created no elements to export')
+            from System.Collections.Generic import List
+            view_type = next((item for item in DB.FilteredElementCollector(doc).OfClass(DB.ViewFamilyType)
+                              if item.ViewFamily == DB.ViewFamily.ThreeDimensional), None)
+            if view_type is None:
+                raise ValueError('No 3D view type available for task IFC export')
+            view = DB.View3D.CreateIsometric(doc, view_type.Id)
+            hidden = List[DB.ElementId]()
+            for item in DB.FilteredElementCollector(doc).WhereElementIsNotElementType():
+                if text_type(item.Id.Value) not in element_ids and item.CanBeHidden(view):
+                    hidden.Add(item.Id)
+            if hidden.Count:
+                view.HideElements(hidden)
+            doc.Regenerate()
+            options.FilterViewId = view.Id
+            options.AddOption('VisibleElementsOfCurrentView', 'true')
         ok = doc.Export(directory, 'model', options)
         # IFC export requires a transaction, but its temporary document edits are discarded.
         transaction.RollBack()
@@ -323,11 +349,13 @@ def _execute(code, filepath, request_id, revit, directory, operation):
         result['error'] = 'Use an editable project with no other transaction active.'
         return result
     export_only = '# recvt_export_only' in code.splitlines()[:4]
+    before_ids = None
     if not export_only:
         group = DB.TransactionGroup(doc, 'Recvt AI building')
         try:
             if group.Start() != DB.TransactionStatus.Started:
                 raise Exception('Cannot start model transaction group')
+            before_ids = model_element_ids(doc)
             namespace = {'__revit__': revit, 'doc': doc, 'uidoc': revit.ActiveUIDocument,
                          '__name__': '__main__', '__file__': filepath}
             check_model_code(code, filepath)
@@ -350,6 +378,15 @@ def _execute(code, filepath, request_id, revit, directory, operation):
     # Once committed, export errors must NEVER be reported as model failures.
     result.update(success=True, stage='complete', model_success=True,
                   ifc_success=False, mesh_success=False)
+    element_ids = None
+    if not export_only:
+        try:
+            element_ids = model_element_ids(doc) - before_ids
+            result['export_scope'] = 'task_created_elements'
+            result['created_element_count'] = len(element_ids)
+        except Exception:
+            result['warnings'].append('Cannot determine task export scope; no model exported: ' + traceback.format_exc())
+            return result
     try:
         output = os.path.join(directory, 'output', request_id)
         if not os.path.isdir(output):
@@ -358,13 +395,13 @@ def _execute(code, filepath, request_id, revit, directory, operation):
         result['warnings'].append('Cannot create export directory: ' + traceback.format_exc())
         return result
     try:
-        export_ifc(doc, output)
+        export_ifc(doc, output, element_ids)
         result['ifc_success'] = True
         result['ifc_path'] = 'output/{}/model.ifc'.format(request_id)
     except Exception:
         result['warnings'].append('IFC export failed (model kept): ' + traceback.format_exc())
     try:
-        triangles, skipped = export_mesh(doc, os.path.join(output, 'model.obj'))
+        triangles, skipped = export_mesh(doc, os.path.join(output, 'model.obj'), element_ids)
         result['mesh_success'] = True
         result['mesh_path'] = 'output/{}/model.obj'.format(request_id)
         result['triangles'] = triangles

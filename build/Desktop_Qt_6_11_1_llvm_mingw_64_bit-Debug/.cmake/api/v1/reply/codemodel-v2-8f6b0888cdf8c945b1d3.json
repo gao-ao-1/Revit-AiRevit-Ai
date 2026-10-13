@@ -1,0 +1,70 @@
+{
+	"configurations" : 
+	[
+		{
+			"directories" : 
+			[
+				{
+					"build" : ".",
+					"hasInstallRule" : true,
+					"jsonFile" : "directory-.-Debug-eaf30edd8227b34abd54.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.16"
+					},
+					"projectIndex" : 0,
+					"source" : ".",
+					"targetIndexes" : 
+					[
+						0,
+						1
+					]
+				}
+			],
+			"name" : "Debug",
+			"projects" : 
+			[
+				{
+					"directoryIndexes" : 
+					[
+						0
+					],
+					"name" : "RecvtConsole",
+					"targetIndexes" : 
+					[
+						0,
+						1
+					]
+				}
+			],
+			"targets" : 
+			[
+				{
+					"directoryIndex" : 0,
+					"id" : "RecvtConsole::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-RecvtConsole-Debug-0715fd24de059ac7623c.json",
+					"name" : "RecvtConsole",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "RecvtConsole_autogen::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-RecvtConsole_autogen-Debug-cb455dd0a2fad79d938b.json",
+					"name" : "RecvtConsole_autogen",
+					"projectIndex" : 0
+				}
+			]
+		}
+	],
+	"kind" : "codemodel",
+	"paths" : 
+	{
+		"build" : "E:/\u9879\u76ee/RecvtConsole/build/Desktop_Qt_6_11_1_llvm_mingw_64_bit-Debug",
+		"source" : "E:/\u9879\u76ee/RecvtConsole"
+	},
+	"version" : 
+	{
+		"major" : 2,
+		"minor" : 5
+	}
+}

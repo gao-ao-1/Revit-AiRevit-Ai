@@ -935,6 +935,8 @@ void MainWindow::slotLlmFinished(GenerateResult genRes)
 void MainWindow::slotRevitFinished(ExecuteResult execRes)
 {
     if(execRes.success){
+        // A successful task replaces the preview even when its export is empty.
+        clear3dScene();
         m_pendingScript.clear();
         appendMessage("✅ Revit 执行成功", QString::fromStdString(execRes.output),
                       QColor("#0a7a3d"), QColor("#1a9e4b"));

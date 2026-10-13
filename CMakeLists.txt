@@ -11,7 +11,11 @@ if(WIN32 AND NOT DEFINED Qt6_DIR AND NOT CMAKE_PREFIX_PATH)
     if(MSVC)
         set(_recvt_local_qt "D:/qt6/6.11.1/msvc2022_64")
     elseif(MINGW)
-        set(_recvt_local_qt "D:/qt6/6.11.1/mingw_64")
+        if(CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
+            set(_recvt_local_qt "D:/qt6/6.11.1/llvm-mingw_64")
+        else()
+            set(_recvt_local_qt "D:/qt6/6.11.1/mingw_64")
+        endif()
     endif()
     if(EXISTS "${_recvt_local_qt}/lib/cmake/Qt6/Qt6Config.cmake")
         list(PREPEND CMAKE_PREFIX_PATH "${_recvt_local_qt}")
@@ -57,7 +61,7 @@ add_executable(RecvtConsole WIN32 MACOSX_BUNDLE
     main.cpp mainwindow.cpp mainwindow.h types.h error_guard.cpp error_guard.h
     llm_client.h llm_client.cpp ollama_llm.h ollama_llm.cpp
     deepseek_llm.h deepseek_llm.cpp script_executor.h script_executor.cpp preview_controller.h preview_controller.cpp)
-if(WIN32 AND MINGW)
+if(WIN32)
     # Some Windows MinGW moc builds cannot create output under non-ASCII directories.
     string(MD5 _recvt_build_id "${CMAKE_BINARY_DIR}")
     file(TO_CMAKE_PATH "$ENV{TEMP}" _recvt_temp)
@@ -74,7 +78,11 @@ option(RECVT_DEPLOY_RUNTIME "Deploy Qt runtime beside the Windows executable" ON
 if(WIN32 AND RECVT_DEPLOY_RUNTIME)
     find_program(RECVT_WINDEPLOYQT windeployqt HINTS "${Qt6_DIR}/../../../bin" NO_DEFAULT_PATH)
     if(RECVT_WINDEPLOYQT)
-        if(MINGW)
+        if(MINGW AND CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
+            # The local LLVM Qt kit's DLLs carry debug metadata even for release
+            # applications; --release incorrectly filters out qwindows.dll.
+            set(_recvt_deploy_mode --debug)
+        elseif(MINGW)
             # This MinGW kit supplies release Qt DLLs for both application configurations.
             set(_recvt_deploy_mode --release)
         else()
@@ -86,7 +94,7 @@ if(WIN32 AND RECVT_DEPLOY_RUNTIME)
             COMMENT "Deploying Qt 6 runtime" VERBATIM)
         if(MINGW)
             get_filename_component(_recvt_compiler_bin "${CMAKE_CXX_COMPILER}" DIRECTORY)
-            foreach(_recvt_runtime libgcc_s_seh-1.dll libstdc++-6.dll libwinpthread-1.dll)
+            foreach(_recvt_runtime libgcc_s_seh-1.dll libstdc++-6.dll libwinpthread-1.dll libc++.dll libunwind.dll)
                 if(EXISTS "${_recvt_compiler_bin}/${_recvt_runtime}")
                     add_custom_command(TARGET RecvtConsole POST_BUILD
                         COMMAND "${CMAKE_COMMAND}" -E copy_if_different

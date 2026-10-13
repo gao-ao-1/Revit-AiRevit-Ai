@@ -1,0 +1,3 @@
+set(__QT_DEPLOY_TARGET_RecvtConsole_FILE E:/项目/RecvtConsole/build/Desktop_Qt_6_11_1_llvm_mingw_64_bit-Release/RecvtConsole.exe)
+set(__QT_DEPLOY_TARGET_RecvtConsole_TYPE EXECUTABLE)
+set(__QT_DEPLOY_TARGET_RecvtConsole_RUNTIME_DLLS D:/qt6/6.11.1/llvm-mingw_64/bin/Qt6Widgets.dll;D:/qt6/6.11.1/llvm-mingw_64/bin/Qt63DExtras.dll;D:/qt6/6.11.1/llvm-mingw_64/bin/Qt63DRender.dll;D:/qt6/6.11.1/llvm-mingw_64/bin/Qt6OpenGL.dll;D:/qt6/6.11.1/llvm-mingw_64/bin/Qt63DInput.dll;D:/qt6/6.11.1/llvm-mingw_64/bin/Qt63DLogic.dll;D:/qt6/6.11.1/llvm-mingw_64/bin/Qt63DCore.dll;D:/qt6/6.11.1/llvm-mingw_64/bin/Qt6Network.dll;D:/qt6/6.11.1/llvm-mingw_64/bin/Qt6Concurrent.dll;D:/qt6/6.11.1/llvm-mingw_64/bin/Qt6Gui.dll;D:/qt6/6.11.1/llvm-mingw_64/bin/Qt6Core.dll)

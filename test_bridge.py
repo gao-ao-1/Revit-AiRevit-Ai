@@ -63,7 +63,20 @@ class BridgeTest(unittest.TestCase):
         self.patch.start(); self.addCleanup(self.patch.stop)
         doc = types.SimpleNamespace(IsFamilyDocument=False, IsReadOnly=False, IsModifiable=False)
         self.revit = types.SimpleNamespace(ActiveUIDocument=types.SimpleNamespace(Document=doc))
+        snapshot = patch.object(bridge, 'model_element_ids', return_value=set())
+        snapshot.start(); self.addCleanup(snapshot.stop)
         Group.committed = Group.rolled_back = 0
+
+    def test_second_task_exports_only_its_new_elements(self):
+        with patch.object(bridge, 'model_element_ids', side_effect=[{'house'}, {'house', 'bridge'}]), \
+             patch.object(bridge, 'export_ifc') as ifc, \
+             patch.object(bridge, 'export_mesh', return_value=(12, 0)) as mesh, \
+             patch.object(bridge, 'write_context'):
+            result = self.execute('value = 123')
+        self.assertTrue(result['success'])
+        self.assertEqual(ifc.call_args.args[2], {'bridge'})
+        self.assertEqual(mesh.call_args.args[2], {'bridge'})
+        self.assertEqual(result['created_element_count'], 1)
 
     def execute(self, code):
         return bridge.execute(code, 'ai_gen.py', 'test-id', self.revit, self.directory)
