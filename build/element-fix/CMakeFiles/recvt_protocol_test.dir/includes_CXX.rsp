@@ -1,0 +1,1 @@
+-I"E:/Revit-AI/RecvtConsole/build/element-fix/recvt_protocol_test_autogen/include" -I"E:/Revit-AI/RecvtConsole" -isystem "D:/qt6/6.11.1/llvm-mingw_64/include/QtCore" -isystem "D:/qt6/6.11.1/llvm-mingw_64/include" -isystem "D:/qt6/6.11.1/llvm-mingw_64/mkspecs/win32-clang-g++"

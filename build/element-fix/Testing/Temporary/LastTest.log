@@ -1,0 +1,67 @@
+Start testing: Oct 15 10:16 中国标准时间
+----------------------------------------------------------
+1/4 Testing: recvt_protocol
+1/4 Test: recvt_protocol
+Command: "E:/Revit-AI/RecvtConsole/build/element-fix/recvt_protocol_test.exe"
+Directory: E:/Revit-AI/RecvtConsole/build/element-fix
+"recvt_protocol" start time: Oct 15 10:16 中国标准时间
+Output:
+----------------------------------------------------------
+session and file protocol checks passed
+<end of output>
+Test time =   2.31 sec
+----------------------------------------------------------
+Test Passed.
+"recvt_protocol" end time: Oct 15 10:16 中国标准时间
+"recvt_protocol" time elapsed: 00:00:02
+----------------------------------------------------------
+
+2/4 Testing: recvt_preview
+2/4 Test: recvt_preview
+Command: "E:/Revit-AI/RecvtConsole/build/element-fix/recvt_preview_test.exe"
+Directory: E:/Revit-AI/RecvtConsole/build/element-fix
+"recvt_preview" start time: Oct 15 10:16 中国标准时间
+Output:
+----------------------------------------------------------
+native-window rotation, container panning, zoom and reset passed
+<end of output>
+Test time =   0.07 sec
+----------------------------------------------------------
+Test Passed.
+"recvt_preview" end time: Oct 15 10:16 中国标准时间
+"recvt_preview" time elapsed: 00:00:00
+----------------------------------------------------------
+
+3/4 Testing: recvt_model_browser
+3/4 Test: recvt_model_browser
+Command: "E:/Revit-AI/RecvtConsole/build/element-fix/recvt_model_browser_test.exe"
+Directory: E:/Revit-AI/RecvtConsole/build/element-fix
+"recvt_model_browser" start time: Oct 15 10:16 中国标准时间
+Output:
+----------------------------------------------------------
+model groups, properties, materials, picking, visibility, search, reload and legacy compatibility passed
+<end of output>
+Test time =   0.09 sec
+----------------------------------------------------------
+Test Passed.
+"recvt_model_browser" end time: Oct 15 10:16 中国标准时间
+"recvt_model_browser" time elapsed: 00:00:00
+----------------------------------------------------------
+
+4/4 Testing: recvt_error_guard
+4/4 Test: recvt_error_guard
+Command: "E:/Revit-AI/RecvtConsole/build/element-fix/recvt_error_guard_test.exe"
+Directory: E:/Revit-AI/RecvtConsole/build/element-fix
+"recvt_error_guard" start time: Oct 15 10:16 中国标准时间
+Output:
+----------------------------------------------------------
+Error memory persistence, deduplication, guards and migration OK
+<end of output>
+Test time =   0.05 sec
+----------------------------------------------------------
+Test Passed.
+"recvt_error_guard" end time: Oct 15 10:16 中国标准时间
+"recvt_error_guard" time elapsed: 00:00:00
+----------------------------------------------------------
+
+End testing: Oct 15 10:16 中国标准时间
